@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAB Consulting | AI & Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0a0a0a; color: #ffffff; font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(90deg, #4f46e5, #9333ea, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="min-h-screen flex flex-col items-center justify-center text-center px-4">
+        <nav class="absolute top-0 w-full py-6 flex justify-between px-10 items-center">
+            <div class="text-2xl font-bold tracking-tighter">MAB<span class="text-indigo-500">.</span></div>
+            <a href="mailto:contact@mab-consulting.com" class="glass px-6 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-black transition">Contact</a>
+        </nav>
+
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
+            Engineering the <span class="gradient-text">Future of AI</span>
+        </h1>
+        <p class="max-w-2xl text-gray-400 text-lg md:text-xl mb-10">
+            MAB Consulting bridges the gap between complex engineering systems and cutting-edge AI automation. We build the platforms that drive ROI.
+        </p>
+        <div class="flex gap-4">
+            <button class="bg-indigo-600 px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition">Get Started</button>
+            <button class="glass px-8 py-3 rounded-xl font-bold hover:bg-white/10 transition">View Work</button>
+        </div>
+    </header>
+
+    <section class="py-24 px-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="glass p-8 rounded-3xl">
+                <div class="text-indigo-400 text-3xl mb-4">⚙️</div>
+                <h3 class="text-xl font-bold mb-2">MLOps & Orchestration</h3>
+                <p class="text-gray-400">Scaling AI models from experiments to robust production environments.</p>
+            </div>
+            <div class="glass p-8 rounded-3xl">
+                <div class="text-indigo-400 text-3xl mb-4">🤖</div>
+                <h3 class="text-xl font-bold mb-2">AI Agent Design</h3>
+                <p class="text-gray-400">Custom autonomous agents that handle complex workflows and decision-making.</p>
+            </div>
+            <div class="glass p-8 rounded-3xl">
+                <div class="text-indigo-400 text-3xl mb-4">📊</div>
+                <h3 class="text-xl font-bold mb-2">Systems Thinking</h3>
+                <p class="text-gray-400">Connecting IoT sensors with predictive maintenance and business intelligence.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center border-t border-white/10">
+        <p class="text-gray-500 text-sm">© 2026 MAB Consulting. Built with Intelligence.</p>
+    </footer>
+
+</body>
+</html>
