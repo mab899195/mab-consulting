@@ -1,1 +1,17 @@
+backend:
+  name: github
+  repo: mab899195/mab-consulting # Change this to your repo!
+  branch: main
 
+media_folder: "assets/images" # Where photos will be saved
+public_folder: "/assets/images" # How the website sees the photos
+
+collections:
+  - name: "gallery"
+    label: "Photo Gallery"
+    folder: "content/gallery" # It will save data files here
+    create: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Business Photo", name: "image", widget: "image" }
+      - { label: "Description", name: "body", widget: "markdown" }
