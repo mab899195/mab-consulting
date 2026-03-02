@@ -1,3 +1,4 @@
+site_url: https://mab899195.github.io/mab-consulting/
 backend:
   name: github
   repo: mab899195/mab-consulting # Change this to your repo!
