@@ -1,12 +1,390 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────────────────────── */
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-brand-buy:  #6366f1;
+  --color-brand-rent: #f59e0b;
+  --color-surface:    #ffffff;
+  --color-bg:         #f6f8fb;
+  --color-border:     #e8edf3;
+  --radius-card:      18px;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
   padding: 0;
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-sans);
 }
 
-#root {
+#root { min-height: 100vh; }
+
+/* ─── Layout ─────────────────────────────────────────────────────────────────── */
+.app-root {
   min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.main-grid {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px 20px 56px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 310px 1fr;
+    gap: 24px;
+  }
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────── */
+.app-header {
+  background: #0d1117;
+  border-bottom: 1px solid #1e2733;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px #6366f140;
+}
+
+.year-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #161d27;
+  border: 1px solid #1e2733;
+  border-radius: 12px;
+  padding: 3px;
+}
+
+.year-tab {
+  padding: 6px 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, box-shadow 0.15s;
+  line-height: 1;
+}
+
+.year-tab:hover { color: #94a3b8; }
+
+.year-tab--active {
+  background: #6366f1;
+  color: #fff;
+  box-shadow: 0 2px 8px #6366f150;
+}
+
+/* ─── Inputs column ──────────────────────────────────────────────────────────── */
+.inputs-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .inputs-col {
+    position: sticky;
+    top: 57px;
+    max-height: calc(100vh - 73px);
+    overflow-y: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #e2e8f0 transparent;
+  }
+  .inputs-col::-webkit-scrollbar { width: 3px; }
+  .inputs-col::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+}
+
+/* ─── Card ───────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
+  padding: 22px;
+}
+
+.card-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  margin: 0 0 14px;
+}
+
+/* ─── Slider value chip ──────────────────────────────────────────────────────── */
+.value-chip {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 7px;
+  border: 1px solid;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.input-row {
+  /* spacing managed by parent space-y */
+}
+
+/* ─── Results column ─────────────────────────────────────────────────────────── */
+.results-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Verdict card ───────────────────────────────────────────────────────────── */
+.verdict-card {
+  background: #0d1117;
+  border-radius: var(--radius-card);
+  border: 1px solid #1e2733;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
+
+.verdict-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.verdict-content {
+  position: relative;
+  padding: 28px 28px 24px;
+}
+
+.verdict-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 18px;
+}
+
+.verdict-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.verdict-label {
+  font-size: 13px;
+  color: #475569;
+  margin: 0 0 6px;
+  font-weight: 500;
+}
+
+.verdict-amount {
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 900;
+  color: #f8fafc;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 6px;
+}
+
+.verdict-sub {
+  font-size: 13px;
+  color: #475569;
+  margin: 0;
+  font-weight: 500;
+}
+
+.verdict-footer {
+  padding: 0 28px 22px;
+  position: relative;
+}
+
+.verdict-divider {
+  height: 1px;
+  background: #1e2733;
+  margin-bottom: 14px;
+}
+
+.verdict-footnote {
+  font-size: 12px;
+  color: #475569;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Net worth bar ──────────────────────────────────────────────────────────── */
+.nw-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  gap: 1.5px;
+  margin-bottom: 18px;
+  background: #f1f5f9;
+}
+
+.nw-bar-segment {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nw-bar-buy  { background: linear-gradient(90deg, #818cf8, #6366f1); }
+.nw-bar-rent { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+
+.nw-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.nw-item { /* inherits */ }
+
+.nw-winner-badge {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+/* ─── Chart legend ───────────────────────────────────────────────────────────── */
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ─── Monthly costs ──────────────────────────────────────────────────────────── */
+.cost-total {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 7px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-total--buy  { background: #eef2ff; color: #6366f1; }
+.cost-total--rent { background: #fffbeb; color: #d97706; }
+
+.cost-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.cost-col-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.cost-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cost-label {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.cost-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cost-bar-track {
+  flex: 1;
+  height: 3px;
+  background: #f1f5f9;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cost-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.cost-value {
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 52px;
+  text-align: right;
+}
+
+.cost-savings-note {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.45;
+  border: 1px solid #e8edf3;
+}
+
+/* ─── Footer note ────────────────────────────────────────────────────────────── */
+.footer-note {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.6;
+  padding: 0 2px;
+  margin: 0;
 }
