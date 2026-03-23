@@ -1,15 +1,15 @@
 import { useState, useMemo } from 'react';
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Area,
+  AreaChart,
 } from 'recharts';
-import { Home, DollarSign, TrendingUp } from 'lucide-react';
+import { Home, Building2, TrendingUp, Info } from 'lucide-react';
 import type {
   BuyingInputs,
   RentingInputs,
@@ -19,6 +19,60 @@ import {
   findBreakevenYear,
   formatCurrency,
 } from './utils/calculations';
+
+function InputSlider({ label, value, onChange, min, max, step, unit = '' }: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  min: number;
+  max: number;
+  step: number;
+  unit?: string;
+}) {
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-baseline">
+        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <span className="text-lg font-semibold text-blue-600">
+          {unit === '$' ? formatCurrency(value) : `${value}${unit}`}
+        </span>
+      </div>
+      <div className="relative">
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
+        />
+      </div>
+    </div>
+  );
+}
+
+function ResultCard({ title, value, subtitle, color = 'blue' }: {
+  title: string;
+  value: string;
+  subtitle?: string;
+  color?: string;
+}) {
+  const colorClasses = {
+    blue: 'bg-blue-50 border-blue-200',
+    green: 'bg-green-50 border-green-200',
+    orange: 'bg-orange-50 border-orange-200',
+    purple: 'bg-purple-50 border-purple-200',
+  };
+
+  return (
+    <div className={`${colorClasses[color as keyof typeof colorClasses]} border rounded-xl p-4`}>
+      <p className="text-sm text-gray-600 mb-1">{title}</p>
+      <p className="text-3xl font-bold text-gray-900">{value}</p>
+      {subtitle && <p className="text-xs text-gray-500 mt-2">{subtitle}</p>}
+    </div>
+  );
+}
 
 export default function App() {
   const [buying, setBuying] = useState<BuyingInputs>({
@@ -51,194 +105,30 @@ export default function App() {
   const difference = finalBuyingValue - finalRentingValue;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-zinc-900 to-slate-950">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Rent vs. Buy Calculator
-          </h1>
-          <p className="text-slate-400">
-            Compare your financial scenarios with sophisticated first-principles calculation
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <Home className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Rent vs. Buy</h1>
+          </div>
+          <p className="text-gray-600 max-w-2xl">
+            Make an informed financial decision. Compare buying a home with renting over 20, 25, or 30 years.
           </p>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Panel - Inputs */}
-          <div className="space-y-6">
-            {/* Buying Inputs */}
-            <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Home className="w-5 h-5 text-slate-400" />
-                <h2 className="text-lg font-semibold text-white">Buying Scenario</h2>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-slate-300 mb-1">
-                    Home Price: {formatCurrency(buying.homePrice)}
-                  </label>
-                  <input
-                    type="range"
-                    min="100000"
-                    max="1000000"
-                    step="10000"
-                    value={buying.homePrice}
-                    onChange={(e) =>
-                      setBuying({ ...buying, homePrice: Number(e.target.value) })
-                    }
-                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-slate-300 mb-1">
-                    Down Payment: {buying.downPaymentPercent}%
-                  </label>
-                  <input
-                    type="range"
-                    min="5"
-                    max="50"
-                    step="1"
-                    value={buying.downPaymentPercent}
-                    onChange={(e) =>
-                      setBuying({ ...buying, downPaymentPercent: Number(e.target.value) })
-                    }
-                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-slate-300 mb-1">
-                    Interest Rate: {buying.interestRate}%
-                  </label>
-                  <input
-                    type="range"
-                    min="2"
-                    max="10"
-                    step="0.1"
-                    value={buying.interestRate}
-                    onChange={(e) =>
-                      setBuying({ ...buying, interestRate: Number(e.target.value) })
-                    }
-                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-slate-300 mb-1">
-                    Property Tax: {buying.propertyTaxPercent}%
-                  </label>
-                  <input
-                    type="range"
-                    min="0.5"
-                    max="3"
-                    step="0.1"
-                    value={buying.propertyTaxPercent}
-                    onChange={(e) =>
-                      setBuying({ ...buying, propertyTaxPercent: Number(e.target.value) })
-                    }
-                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm text-slate-300 mb-1">
-                      Home Insurance / Month
-                    </label>
-                    <input
-                      type="number"
-                      value={buying.homeInsurance}
-                      onChange={(e) =>
-                        setBuying({ ...buying, homeInsurance: Number(e.target.value) })
-                      }
-                      className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-slate-300 mb-1">
-                      HOA / Month
-                    </label>
-                    <input
-                      type="number"
-                      value={buying.hoa}
-                      onChange={(e) =>
-                        setBuying({ ...buying, hoa: Number(e.target.value) })
-                      }
-                      className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Renting Inputs */}
-            <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <DollarSign className="w-5 h-5 text-slate-400" />
-                <h2 className="text-lg font-semibold text-white">Renting Scenario</h2>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-slate-300 mb-1">
-                    Monthly Rent: {formatCurrency(renting.monthlyRent)}
-                  </label>
-                  <input
-                    type="range"
-                    min="500"
-                    max="5000"
-                    step="50"
-                    value={renting.monthlyRent}
-                    onChange={(e) =>
-                      setRenting({ ...renting, monthlyRent: Number(e.target.value) })
-                    }
-                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-slate-300 mb-1">
-                    Annual Rent Increase: {renting.rentIncreasePercent}%
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="5"
-                    step="0.1"
-                    value={renting.rentIncreasePercent}
-                    onChange={(e) =>
-                      setRenting({ ...renting, rentIncreasePercent: Number(e.target.value) })
-                    }
-                    className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-slate-300 mb-1">
-                    Renter's Insurance / Month
-                  </label>
-                  <input
-                    type="number"
-                    value={renting.rentersInsurance}
-                    onChange={(e) =>
-                      setRenting({ ...renting, rentersInsurance: Number(e.target.value) })
-                    }
-                    className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Time Horizon */}
-            <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-slate-400" />
-                <h2 className="text-lg font-semibold text-white">Time Horizon</h2>
-              </div>
-
-              <div className="flex gap-2">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Inputs */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Time Horizon Selector */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4">Analysis Period</h3>
+              <div className="grid grid-cols-3 gap-2">
                 {[20, 25, 30].map((year) => (
                   <button
                     key={year}
@@ -246,97 +136,242 @@ export default function App() {
                       setBuying({ ...buying, years: year });
                       setRenting({ ...renting, years: year });
                     }}
-                    className={`flex-1 py-2 px-4 rounded font-semibold transition ${
+                    className={`py-2 px-3 rounded-lg font-semibold text-sm transition ${
                       renting.years === year
-                        ? 'bg-slate-500 text-white'
-                        : 'bg-zinc-700 text-slate-300 hover:bg-zinc-600'
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    {year} years
+                    {year}y
                   </button>
                 ))}
               </div>
             </div>
-          </div>
 
-          {/* Right Panel - Charts & Results */}
-          <div className="space-y-6">
-            {/* Results Cards */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-lg p-4">
-                <p className="text-slate-400 text-sm mb-1">Buy Net Worth</p>
-                <p className="text-2xl font-bold text-white">
-                  {formatCurrency(finalBuyingValue)}
-                </p>
+            {/* Buying Inputs */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+              <div className="flex items-center gap-2 mb-5">
+                <Home className="w-5 h-5 text-blue-600" />
+                <h3 className="text-sm font-semibold text-gray-900">Buying</h3>
               </div>
-              <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-lg p-4">
-                <p className="text-slate-400 text-sm mb-1">Rent Net Worth</p>
-                <p className="text-2xl font-bold text-white">
-                  {formatCurrency(finalRentingValue)}
-                </p>
+              <div className="space-y-5">
+                <InputSlider
+                  label="Home Price"
+                  value={buying.homePrice}
+                  onChange={(v) => setBuying({ ...buying, homePrice: v })}
+                  min={100000}
+                  max={1000000}
+                  step={10000}
+                  unit="$"
+                />
+                <InputSlider
+                  label="Down Payment"
+                  value={buying.downPaymentPercent}
+                  onChange={(v) => setBuying({ ...buying, downPaymentPercent: v })}
+                  min={5}
+                  max={50}
+                  step={1}
+                  unit="%"
+                />
+                <InputSlider
+                  label="Interest Rate"
+                  value={buying.interestRate}
+                  onChange={(v) => setBuying({ ...buying, interestRate: v })}
+                  min={2}
+                  max={10}
+                  step={0.1}
+                  unit="%"
+                />
+                <InputSlider
+                  label="Property Tax"
+                  value={buying.propertyTaxPercent}
+                  onChange={(v) => setBuying({ ...buying, propertyTaxPercent: v })}
+                  min={0.5}
+                  max={3}
+                  step={0.1}
+                  unit="%"
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Insurance/mo
+                    </label>
+                    <input
+                      type="number"
+                      value={buying.homeInsurance}
+                      onChange={(e) =>
+                        setBuying({ ...buying, homeInsurance: Number(e.target.value) })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 font-medium"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      HOA/mo
+                    </label>
+                    <input
+                      type="number"
+                      value={buying.hoa}
+                      onChange={(e) =>
+                        setBuying({ ...buying, hoa: Number(e.target.value) })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 font-medium"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {breakeven && (
-              <div className="bg-gradient-to-r from-amber-950 to-amber-900 border border-amber-700 rounded-lg p-4">
-                <p className="text-amber-300 text-sm mb-1">Break-Even Year</p>
-                <p className="text-2xl font-bold text-white">Year {breakeven}</p>
+            {/* Renting Inputs */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+              <div className="flex items-center gap-2 mb-5">
+                <Building2 className="w-5 h-5 text-orange-600" />
+                <h3 className="text-sm font-semibold text-gray-900">Renting</h3>
               </div>
-            )}
+              <div className="space-y-5">
+                <InputSlider
+                  label="Monthly Rent"
+                  value={renting.monthlyRent}
+                  onChange={(v) => setRenting({ ...renting, monthlyRent: v })}
+                  min={500}
+                  max={5000}
+                  step={50}
+                  unit="$"
+                />
+                <InputSlider
+                  label="Rent Increase/Year"
+                  value={renting.rentIncreasePercent}
+                  onChange={(v) => setRenting({ ...renting, rentIncreasePercent: v })}
+                  min={0}
+                  max={5}
+                  step={0.1}
+                  unit="%"
+                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Insurance/mo
+                  </label>
+                  <input
+                    type="number"
+                    value={renting.rentersInsurance}
+                    onChange={(e) =>
+                      setRenting({ ...renting, rentersInsurance: Number(e.target.value) })
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
-            <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-lg p-4">
-              <p className="text-slate-400 text-sm mb-2">
-                {difference > 0 ? 'Buying Advantage' : 'Renting Advantage'}
-              </p>
-              <p
-                className={`text-2xl font-bold ${
-                  difference > 0 ? 'text-green-400' : 'text-blue-400'
-                }`}
-              >
-                {formatCurrency(Math.abs(difference))}
-              </p>
+          {/* Right Column - Results & Chart */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Key Metrics */}
+            <div className="grid grid-cols-2 gap-4">
+              <ResultCard
+                title="Buying Net Worth"
+                value={formatCurrency(finalBuyingValue)}
+                color="blue"
+              />
+              <ResultCard
+                title="Renting Net Worth"
+                value={formatCurrency(finalRentingValue)}
+                color="orange"
+              />
+            </div>
+
+            {/* Advantage Card */}
+            <div className="grid grid-cols-2 gap-4">
+              {breakeven && (
+                <ResultCard
+                  title="Break-Even Year"
+                  value={`Year ${breakeven}`}
+                  subtitle={`After ${breakeven} years, buying becomes advantageous`}
+                  color="purple"
+                />
+              )}
+              <div className={`rounded-xl p-4 border ${
+                difference > 0
+                  ? 'bg-green-50 border-green-200'
+                  : 'bg-blue-50 border-blue-200'
+              }`}>
+                <p className="text-sm text-gray-600 mb-1">
+                  {difference > 0 ? 'Buying Advantage' : 'Renting Advantage'}
+                </p>
+                <p className={`text-3xl font-bold ${
+                  difference > 0 ? 'text-green-600' : 'text-blue-600'
+                }`}>
+                  {formatCurrency(Math.abs(difference))}
+                </p>
+              </div>
             </div>
 
             {/* Chart */}
-            <div className="bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 rounded-lg p-6">
-              <h3 className="text-white font-semibold mb-4">Net Worth Over Time</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#404854" />
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="w-5 h-5 text-gray-600" />
+                <h3 className="text-sm font-semibold text-gray-900">Net Worth Growth</h3>
+              </div>
+              <ResponsiveContainer width="100%" height={350}>
+                <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorBuying" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorRenting" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#f97316" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                   <XAxis
                     dataKey="year"
-                    stroke="#94a3b8"
+                    stroke="#9ca3af"
                     style={{ fontSize: '12px' }}
                   />
-                  <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
+                  <YAxis
+                    stroke="#9ca3af"
+                    style={{ fontSize: '12px' }}
+                    tickFormatter={(v) => `$${(v / 1000000).toFixed(1)}M`}
+                  />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#1f2937',
-                      border: '1px solid #404854',
+                      backgroundColor: '#ffffff',
+                      border: '1px solid #e5e7eb',
                       borderRadius: '8px',
+                      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                     }}
-                    labelStyle={{ color: '#e2e8f0' }}
-                    formatter={(value) => formatCurrency(Number(value))}
+                    formatter={(value: any) => formatCurrency(Number(value))}
+                    labelFormatter={(label) => `Year ${label}`}
                   />
                   <Legend />
-                  <Line
+                  <Area
                     type="monotone"
                     dataKey="buyingNetWorth"
-                    stroke="#f97316"
+                    stroke="#3b82f6"
+                    fillOpacity={1}
+                    fill="url(#colorBuying)"
                     name="Buying"
-                    dot={false}
-                    strokeWidth={2}
                   />
-                  <Line
+                  <Area
                     type="monotone"
                     dataKey="rentingNetWorth"
-                    stroke="#3b82f6"
+                    stroke="#f97316"
+                    fillOpacity={1}
+                    fill="url(#colorRenting)"
                     name="Renting"
-                    dot={false}
-                    strokeWidth={2}
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
+            </div>
+
+            {/* Info Box */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
+              <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-blue-900">
+                This calculator includes opportunity cost: assumes down payment and monthly savings are invested at 7% annual returns. Home value appreciates at 3% yearly.
+              </p>
             </div>
           </div>
         </div>
