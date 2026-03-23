@@ -17,15 +17,26 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        .nav-active {
+            color: #4f46e5;
+            border-b: 2px solid #4f46e5;
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="min-h-screen flex flex-col items-center justify-center text-center px-4">
-        <nav class="absolute top-0 w-full py-6 flex justify-between px-10 items-center">
-            <div class="text-2xl font-bold tracking-tighter">MAB<span class="text-indigo-500">.</span></div>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full py-6 flex justify-between px-10 items-center bg-black/50 backdrop-blur-md border-b border-white/10 z-50">
+        <div class="text-2xl font-bold tracking-tighter">MAB<span class="text-indigo-500">.</span></div>
+        <div class="flex gap-8 items-center">
+            <a href="#home" class="nav-link text-sm font-medium hover:text-indigo-400 transition" onclick="scrollToSection('home')">Home</a>
+            <a href="#portfolio" class="nav-link text-sm font-medium hover:text-indigo-400 transition" onclick="scrollToSection('portfolio')">Portfolio</a>
             <a href="mailto:contact@mab-consulting.com" class="glass px-6 py-2 rounded-full text-sm font-medium hover:bg-white hover:text-black transition">Contact</a>
-        </nav>
+        </div>
+    </nav>
+
+    <header id="home" class="min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20">
+        <div class="py-20"></div>
 
         <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
             Engineering the <span class="gradient-text">Future of AI</span>
@@ -62,9 +73,114 @@
         </div>
     </section>
 
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 px-10 bg-gradient-to-b from-transparent via-indigo-950/10 to-transparent">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-4">Portfolio</h2>
+            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto">Explore the innovative web applications and automation solutions we've developed</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Portfolio Card Template -->
+                <div class="glass rounded-2xl overflow-hidden hover:border-indigo-400 transition group cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center overflow-hidden">
+                        <div class="text-6xl group-hover:scale-110 transition">🤖</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">AI Agent Dashboard</h3>
+                        <p class="text-gray-400 text-sm mb-4">Real-time monitoring and control system for autonomous agents with advanced analytics</p>
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">View Demo →</a>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl overflow-hidden hover:border-indigo-400 transition group cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center overflow-hidden">
+                        <div class="text-6xl group-hover:scale-110 transition">📊</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Data Analytics Platform</h3>
+                        <p class="text-gray-400 text-sm mb-4">Interactive dashboards for data visualization and predictive analytics implementation</p>
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">View Demo →</a>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl overflow-hidden hover:border-indigo-400 transition group cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-pink-600 to-orange-600 flex items-center justify-center overflow-hidden">
+                        <div class="text-6xl group-hover:scale-110 transition">⚙️</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">MLOps Orchestration</h3>
+                        <p class="text-gray-400 text-sm mb-4">Complete pipeline management for model training, deployment, and monitoring</p>
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">View Demo →</a>
+                    </div>
+                </div>
+
+                <!-- Add more projects as needed -->
+                <div class="glass rounded-2xl overflow-hidden hover:border-indigo-400 transition group cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center overflow-hidden">
+                        <div class="text-6xl group-hover:scale-110 transition">🔌</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">IoT Integration Hub</h3>
+                        <p class="text-gray-400 text-sm mb-4">Connect and manage IoT devices with real-time data processing and alerts</p>
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">View Demo →</a>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl overflow-hidden hover:border-indigo-400 transition group cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center overflow-hidden">
+                        <div class="text-6xl group-hover:scale-110 transition">🛡️</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Security Automation</h3>
+                        <p class="text-gray-400 text-sm mb-4">Automated threat detection and response system with compliance reporting</p>
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">View Demo →</a>
+                    </div>
+                </div>
+
+                <div class="glass rounded-2xl overflow-hidden hover:border-indigo-400 transition group cursor-pointer">
+                    <div class="h-48 bg-gradient-to-br from-yellow-600 to-red-600 flex items-center justify-center overflow-hidden">
+                        <div class="text-6xl group-hover:scale-110 transition">💰</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Financial Automation</h3>
+                        <p class="text-gray-400 text-sm mb-4">Intelligent expense tracking and financial forecasting platform</p>
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition">View Demo →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer class="py-10 text-center border-t border-white/10">
         <p class="text-gray-500 text-sm">© 2026 MAB Consulting. Built with Intelligence.</p>
     </footer>
+
+    <script>
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            const homeSection = document.getElementById('home');
+            const portfolioSection = document.getElementById('portfolio');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            const scrollPosition = window.scrollY + 100;
+            
+            navLinks.forEach(link => link.classList.remove('nav-active'));
+            
+            if (portfolioSection && scrollPosition >= portfolioSection.offsetTop) {
+                navLinks[1].classList.add('nav-active');
+            } else {
+                navLinks[0].classList.add('nav-active');
+            }
+        });
+
+        // Set initial active link
+        document.querySelectorAll('.nav-link')[0].classList.add('nav-active');
+    </script>
 
 </body>
 </html>
