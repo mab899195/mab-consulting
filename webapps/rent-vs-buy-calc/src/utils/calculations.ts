@@ -49,7 +49,6 @@ export function calculateRentVsBuy(
   
   let mortgageBalance = loanAmount;
   let homeValue = buying.homePrice;
-  let rentingInvestedFunds = downPayment; // Initial investment of down payment
   let cumulativeBuyingCost = downPayment * (1 + CLOSING_COSTS_PERCENT);
   let cumulativeRentingCost = 0;
   let investmentBalance = downPayment;

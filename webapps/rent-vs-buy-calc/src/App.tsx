@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -10,9 +10,11 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { Home, DollarSign, TrendingUp } from 'lucide-react';
-import {
+import type {
   BuyingInputs,
   RentingInputs,
+} from './utils/calculations';
+import {
   calculateRentVsBuy,
   findBreakevenYear,
   formatCurrency,
@@ -314,7 +316,7 @@ export default function App() {
                       borderRadius: '8px',
                     }}
                     labelStyle={{ color: '#e2e8f0' }}
-                    formatter={(value: number) => formatCurrency(value)}
+                    formatter={(value) => formatCurrency(Number(value))}
                   />
                   <Legend />
                   <Line
